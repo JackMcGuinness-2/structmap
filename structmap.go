@@ -146,15 +146,15 @@ func readTag(f reflect.StructField, tag string) (string, int) {
 	val, ok := f.Tag.Lookup(tag)
 	fieldTag := ""
 	flag := 0
+	var opts []string
 
-	// no tag, skip this field
+	// no tag, use the field name
 	if !ok {
-		flag |= flagIgnore
-		return "", flag
+		fieldTag = f.Name
+	} else {
+		opts = strings.Split(val, ",")
+		fieldTag = opts[0]
 	}
-	opts := strings.Split(val, ",")
-
-	fieldTag = opts[0]
 	for i := 0; i < len(opts); i++ {
 		switch opts[i] {
 		case OptIgnore:
